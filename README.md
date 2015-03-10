@@ -45,12 +45,15 @@ _Automatic generation of the Builder pattern for Java 1.6+_
 Background
 ----------
 
-Implementing the [Builder pattern](http://en.wikipedia.org/wiki/Builder_pattern)
+Implementing the [Builder pattern][]<a id="footnote1-back"
+href="#user-content-footnote1"><sup>1</sup></a>
 in Java is tedious, error-prone and repetitive. Who hasn't seen a ten-argument
 constructor, thought cross thoughts about the previous maintainers of the
 class, then added "just one more"? Even a simple four-field class requires 39
 lines of code for the most basic builder API, or 72 lines if you don't use a
-utility like [AutoValue][] to generate the value boilerplate.
+utility like [AutoValue][]<a id="footnote2-back"
+href="#user-content-footnote2"><sup>2</sup></a> to generate the value
+boilerplate.
 
 `@FreeBuilder` produces all the boilerplate for you, as well as free extras like
 JavaDoc, getter methods, [collections support](#collections-and-maps),
@@ -58,6 +61,8 @@ JavaDoc, getter methods, [collections support](#collections-and-maps),
 (used in testing), which are highly useful, but would very rarely justify
 their creation and maintenance burden in hand-crafted code. (We also reserve
 the right to add more awesome methods in future!)
+
+[Builder pattern]: http://en.wikipedia.org/wiki/Builder_pattern
 
 
 > [The Builder pattern] is more verbose&#8230;so should only be used if there are
@@ -521,6 +526,20 @@ Wait, why "free"?
     the defaults don't work for you.
   * Free as in liberty: you can always drop `@FreeBuilder` and walk away with
     the code it generated for you.
+
+
+Footnotes
+---------
+
+<a name="footnote1"><sup>1</sup> Of course, there are many expressions of the
+Builder pattern, all with one thing in common: verbosity. We generate a hybrid
+of Effective Java and [Google’s Protocol Buffers][protos].
+<a href="#user-content-footnote1-back">↥</a>
+
+<a name="footnote2"><sup>2</sup> See [AutoValue vs
+`@FreeBuilder`](#autovalue-vs-freebuilder) for more about the difference between
+these two approaches.
+<a href="#user-content-footnote2-back">↥</a>
 
 License
 -------
