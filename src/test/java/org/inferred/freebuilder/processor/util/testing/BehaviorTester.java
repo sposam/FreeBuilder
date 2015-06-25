@@ -35,6 +35,7 @@ import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
+import org.inferred.freebuilder.processor.util.SourceLevel;
 import org.junit.Test;
 
 import com.google.common.base.Preconditions;
@@ -104,6 +105,12 @@ public class BehaviorTester {
   private final List<Processor> processors = new ArrayList<Processor>();
   private final List<JavaFileObject> compilationUnits = new ArrayList<JavaFileObject>();
   private boolean shouldSetContextClassLoader = false;
+  private SourceLevel sourceLevel = SourceLevel.JAVA_6;
+
+  public BehaviorTester with(SourceLevel sourceLevel) {
+    this.sourceLevel = sourceLevel;
+    return this;
+  }
 
   /** Adds a {@link Processor} to pass to the compiler when {@link #runTest} is invoked. */
   public BehaviorTester with(Processor processor) {
@@ -141,7 +148,7 @@ public class BehaviorTester {
    */
   public void runTest() {
     try (TempJavaFileManager fileManager = new TempJavaFileManager()) {
-      compile(fileManager, compilationUnits, processors);
+      compile(fileManager, sourceLevel, compilationUnits, processors);
       final ClassLoader classLoader = fileManager.getClassLoader(StandardLocation.CLASS_OUTPUT);
       final List<Throwable> exceptions = new ArrayList<Throwable>();
       if (shouldSetContextClassLoader) {
@@ -220,6 +227,7 @@ public class BehaviorTester {
 
   private static void compile(
       JavaFileManager fileManager,
+      SourceLevel sourceLevel,
       Iterable<? extends JavaFileObject> compilationUnits,
       Iterable<? extends Processor> processors) {
     DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -227,7 +235,9 @@ public class BehaviorTester {
         null,
         fileManager,
         diagnostics,
-        null,
+        ImmutableList.of(
+            "-source", sourceLevel.sourceFlagValue(),
+            "-target", sourceLevel.sourceFlagValue()),
         null,
         compilationUnits);
     task.setProcessors(processors);

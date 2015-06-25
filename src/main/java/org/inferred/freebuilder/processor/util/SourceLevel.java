@@ -13,7 +13,13 @@ import com.google.common.base.Optional;
  * "sourceVersion.compareTo(SourceLevel.RELEASE_7) >= 0".
  */
 public enum SourceLevel {
-  JAVA_6, JAVA_7;
+  JAVA_6("1.6"), JAVA_7("1.7");
+
+  String sourceFlagValue;
+
+  private SourceLevel(String sourceFlagValue) {
+    this.sourceFlagValue = sourceFlagValue;
+  }
 
   public static SourceLevel from(SourceVersion sourceVersion) {
     // RELEASE_6 is always available, as previous releases did not support annotation processing.
@@ -36,5 +42,10 @@ public enum SourceLevel {
 
   public boolean supportsDiamondOperator() {
     return this.compareTo(JAVA_7) >= 0;
+  }
+
+  /** Returns the value that should be passed to javac -source to produce this source level. */
+  public String sourceFlagValue() {
+    return sourceFlagValue;
   }
 }
